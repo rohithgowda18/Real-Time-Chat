@@ -1,5 +1,11 @@
 'use strict';
 
+// BACKEND_BASE: set this to the deployed backend base URL (no trailing slash),
+// e.g. 'https://chat-backend.example.com'
+// Leave as an empty string ('') to connect to the same origin (useful when running the
+// Spring Boot app from the same host).
+var BACKEND_BASE = '';
+
 var usernamePage = document.querySelector('#username-page');
 var chatPage = document.querySelector('#chat-page');
 var usernameForm = document.querySelector('#usernameForm');
@@ -23,7 +29,9 @@ function connect(event) {
         usernamePage.classList.add('hidden');
         chatPage.classList.remove('hidden');
 
-        var socket = new SockJS('/ws');
+    // Connect to the backend WebSocket endpoint. If BACKEND_BASE is empty we'll use
+    // the same origin ('/ws'), otherwise we use the full backend URL.
+    var socket = new SockJS((BACKEND_BASE || '') + '/ws');
         stompClient = Stomp.over(socket);
 
         stompClient.connect({}, onConnected, onError);

@@ -12,7 +12,10 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws").withSockJS();
+        // Allow cross-origin requests so the JS served from GitHub Pages (or any other host)
+        // can connect to this WebSocket endpoint. For production, replace "*" with the
+        // specific origin(s) you want to allow (e.g. "https://your-frontend.example.com").
+        registry.addEndpoint("/ws").setAllowedOrigins("*").withSockJS();
     }
 
     @Override
